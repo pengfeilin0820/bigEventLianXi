@@ -65,13 +65,14 @@
                 var password = $('.input_pass').val().trim();
                 if (userName == '' || password == '') {
                     $('#myModal').modal({
-                        keyboard: false,
+                        keyboard:true,
 
                     });
                     $('.modal-body').text('账号或密码为空')
 
                     return;
                 }
+                
                 $.post({
                     url: 'http://localhost:8000/admin/login',
                     data: {
@@ -85,17 +86,17 @@
                             location.href = 'index.html'
                         } else {
                             $('#myModal').modal({
-                                keyboard: false,
+                                keyboard: true,
 
                             });
-                            $('.modal-body').text(dataBack.msg)
+                            $('.modal-body').text('账号或密码错误');
                         }
 
                     }
                 })
-            })
+            });
 
-        })
+        });
     </script>
 </body>
 
