@@ -134,7 +134,18 @@
         });
 
 
-        
+        $.get({
+            url:'http://localhost:8000/admin/getuser',
+            success:function(dataBack){
+                // console.log(dataBack);
+                $('.user_info').children('span').html('欢迎&nbsp;&nbsp;'+dataBack.data.nickname);
+                $('.user_info').children('img').attr('src',dataBack.data.user_pic);
+
+                $('.user_center_link').children('img').attr('src',dataBack.data.user_pic);
+
+
+            }
+        })
 
 
 
