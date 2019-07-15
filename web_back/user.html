@@ -37,8 +37,7 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">邮箱：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control email" name="email"
-                            value="lisisi@126.com">
+                        <input type="text" class="form-control email" name="email" value="lisisi@126.com">
                     </div>
                 </div>
 
@@ -57,8 +56,7 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control password" name="password"
-                            value="12345678">
+                        <input type="text" class="form-control password" name="password" value="12345678">
                     </div>
                 </div>
 
@@ -73,37 +71,32 @@
     </div>
 
 
- <!-- Modal -->
- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
-            </div>
-            <div class="modal-body">
-                修改成功!
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">确认</button>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
+                </div>
+                <div class="modal-body">
+                    修改成功!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">确认</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
 
     <script>
         $(function () {
 
-
-
-
             //图片预览
-
             $('#exampleInputFile').on('change', function () {
-
 
                 var files1 = this.files[0];
                 var filesUrl = URL.createObjectURL(files1);
@@ -117,7 +110,7 @@
                 url: "http://localhost:8000/admin/userinfo_get",
                 success: function (dataBack) {
                     console.log(dataBack);
-                    
+
                     if (dataBack.code == 200) {
 
                         for (var key in dataBack.data) {
@@ -127,17 +120,16 @@
                         // $('.nickname').val(dataBack.data.nickname);
                         // $('.email').val(dataBack.data.email);
                         // $('.password').val(dataBack.data.password);
-                        $('.user_pic').attr('src', dataBack.user_pic);
+                        $('.user_pic').attr('src', dataBack.data.user_pic);
 
                     }
                 }
-
             });
 
 
 
 
-
+            //编辑个人中心信息
 
             $('.btn-edit').on('click', function (e) {
 
@@ -153,24 +145,14 @@
                     success: function (dataBack) {
                         // console.log(dataBack);
                         $('#myModal').modal();
-
-                        $('.btn-primary').on('click',function(){
+                        $('.btn-primary').on('click', function () {
                             location.reload();
+                            parent.location.reload();
+
                         })
-
-
-
                     }
                 })
-
-
-
-
-
             });
-
-
-
         })
     </script>
 </body>
