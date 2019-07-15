@@ -73,7 +73,8 @@
                 <tfoot>
                     <tr>
                         <td colspan="3" class="text-center">
-                            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#addModal">新增分类</a>
+                            <a href="#" class="btn btn-success btn-clear" data-toggle="modal"
+                                data-target="#addModal">新增分类</a>
                         </td>
                     </tr>
                 </tfoot>
@@ -181,11 +182,6 @@
 
             //打开页面自动获取文章类别
             getData();
-
-
-
-
-
             //新增文章分类
             $('#model_add').on('click', function () {
 
@@ -213,7 +209,7 @@
                             // 2.不刷新重新ajax请求显示一次.
                             //getData(); //这种方式性能不高.
 
- 
+
                             // 3.直接操作dom树,给当前的dom树添加一个tr行.
                             var obj = {
                                 name: addName,
@@ -222,20 +218,15 @@
 
                             var resHtml = template('tpl2', obj);
                             $('tbody').append(resHtml);
-                            $('#addModal').modal('hide');
 
                         }
 
                     }
 
-                })
-            })
-
-
-
-
-
-        })
+                });
+                $('#addModal').modal('hide');
+            });
+        });
     </script>
 
 </body>
