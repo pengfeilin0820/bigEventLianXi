@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/twbs-pagination-master/jquery.twbsPagination.min.js"></script>
 </head>
 
 <body>
@@ -250,19 +252,11 @@
             </table>
 
             <div class="row text-center">
-                <ul class="pagination pagination-sm">
-                    <li class="page-item first disabled"><a href="#" class="page-link">首页</a></li>
-                    <li class="page-item prev disabled"><a href="#" class="page-link">上一页</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">6</a></li>
-                    <li class="page-item"><a href="#" class="page-link">7</a></li>
-                    <li class="page-item next"><a href="#" class="page-link">下一页</a></li>
-                    <li class="page-item last"><a href="#" class="page-link">尾页</a></li>
-                </ul>
+
+
+                <ul id="pagination" class="pagination-sm"></ul>
+               
+ 
             </div>
 
         </div>
@@ -339,7 +333,7 @@
                     type: category,
                     state: selStatu,
                     page: myPage,
-                    perpage: 20,
+                    perpage:5,
 
                 },
                 success: function (dataBack) {
@@ -366,10 +360,25 @@
 
 
 
-
+        //一打开页面就刷出文章列表,用代码模拟点击触发
         $('#btnSearch').trigger('click');
 
 
+
+        //分页
+
+
+        $('#pagination').twbsPagination({
+            totalPages: 35,
+            visiblePages: 7,
+            first:'首页',
+            last:'尾页',
+            prev:'上一页',
+            next:'下一页',
+            onPageClick: function (event, page) {
+             getData(page);
+            }
+        });
     </script>
 
 </body>
