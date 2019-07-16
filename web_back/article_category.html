@@ -73,7 +73,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="3" class="text-center">
-                            <a href="#" class="btn btn-success btn-clear" data-toggle="modal"
+                            <a href="#" class="btn btn-success btnAddGate" data-toggle="modal"
                                 data-target="#addModal">新增分类</a>
                         </td>
                     </tr>
@@ -91,13 +91,14 @@
                 </div>
                 <div class="modal-body">
                     <form>
+                        <input type="hidden" name="id" class="id">
                         <div class="form-group">
                             <label for="recipient-name" class="control-label">分类名称:</label>
-                            <input type="text" class="form-control" id="recipient-name">
+                            <input type="text" class="form-control name" id="recipient-name" name="name">
                         </div>
                         <div class="form-group">
                             <label for="message-text" class="control-label">分类别名:</label>
-                            <input type="text" class="form-control" id="recipient-slug">
+                            <input type="text" class="form-control slug" id="recipient-slug" name="slug">
                         </div>
                     </form>
                 </div>
@@ -140,15 +141,14 @@
             <td>{{v.name}}</td>
             <td>{{v.slug}}</td>
             <td class="text-center">
-                <a href="javascript:editTr({&quot;id&quot;:&quot;1&quot;,&quot;slug&quot;:&quot;uncategorized&quot;,&quot;name&quot;:&quot;未分类&quot;});"
-                    class="btn btn-info btn-xs">编辑</a>
-                <a href="javascript:deleteTr( {{v.id}});" class="btn btn-danger btn-xs">删除</a>
+                <a href="#" data-id="{{v.id}}" class="btn btn-info btn-xs btn-edit" >编辑</a>
+                <a href="#" data-id="{{v.id}}" class="btn btn-danger btn-xs btn-delete">删除</a>
             </td>
         </tr>
         {{/each}}
     </script>
 
-    <script type="text/html" id="tpl2">
+    <!-- <script type="text/html" id="tpl2">
         <tr>
             <td>{{name}}</td>
             <td>{{slug}}</td>
@@ -158,7 +158,7 @@
                 <a href="javascript:deleteTr( 1 );" class="btn btn-danger btn-xs">删除</a>
             </td>
         </tr>
-    </script>
+    </script> -->
 
     <script>
         $(function () {
@@ -182,50 +182,143 @@
 
             //打开页面自动获取文章类别
             getData();
-            //新增文章分类
+
+
             $('#model_add').on('click', function () {
 
+                if ($(this).hasClass('btn-success')) {
+                    //编辑
+                    // var name = $('.modal-body .name').val();
+                    // var slug = $('.modal-body .slug').val();
 
-                var addName = $('#recipient-name').val().trim();
-                var addSlug = $('#recipient-slug').val().trim();
+                    var data = $('.modal-body form').serialize();
 
+                    $.post({
+                        url: "http://localhost:8000/admin/category_edit",
+                        data: data,
+                        success: function (dataBack) {
 
-                $.post({
-
-                    url: "http://localhost:8000/admin/category_add",
-                    data: {
-                        name: addName,
-                        slug: addSlug,
-                    },
-                    success: function (dataBack) {
-                        // console.log(dataBack);
-
-                        if (dataBack.code == 200) {
-
-
-                            // 1.刷新页面,用户体验不是很好
-                            // location.reload();
-
-                            // 2.不刷新重新ajax请求显示一次.
-                            //getData(); //这种方式性能不高.
-
-
-                            // 3.直接操作dom树,给当前的dom树添加一个tr行.
-                            var obj = {
-                                name: addName,
-                                slug: addSlug,
+                            if (dataBack.code == 200) {
+                                alert('修改OK');
+                                getData();
                             }
 
-                            var resHtml = template('tpl2', obj);
-                            $('tbody').append(resHtml);
+                        },
+
+                    });
+
+                } else {
+
+                    //新增
+                    var addName = $('#recipient-name').val().trim();
+                    var addSlug = $('#recipient-slug').val().trim();
+
+
+                    $.post({
+
+                        url: "http://localhost:8000/admin/category_add",
+                        data: {
+                            name: addName,
+                            slug: addSlug,
+                        },
+                        success: function (dataBack) {
+                            // console.log(dataBack);
+
+                            if (dataBack.code == 200) {
+
+
+                                // 1.刷新页面,用户体验不是很好
+                                // location.reload();
+
+                                // 2.不刷新重新ajax请求显示一次.
+                                getData(); //这种方式性能不高.
+
+
+                                // 3.直接操作dom树,给当前的dom树添加一个tr行.
+                                // var obj = {
+                                //     name: addName,
+                                //     slug: addSlug,
+                                // }
+
+                                // var resHtml = template('tpl2', obj);
+                                // $('tbody').append(resHtml);
+
+                            }
 
                         }
 
-                    }
+                    });
 
-                });
+                }
                 $('#addModal').modal('hide');
             });
+
+
+            $('.btnAddGate').on('click', function () {
+                $('#addModal .modal-title').html('新增分类');
+                $('#model_add').text('新增').removeClass('btn-success');
+            });
+
+
+            $('tbody').on('click', '.btn-edit', function () {
+                $('#addModal .modal-title').html('修改分类');
+                $('#model_add').text('修改').addClass('btn-success');
+                var id = $(this).attr('data-id');
+                var slug = $(this).parent().prev().text(); //获取文章类别别名
+                var name = $(this).parent().prev().prev().text(); //获取文章类别
+
+
+                $('.modal-body .id').val(id);
+                $('.modal-body .name').val(name);
+                $('.modal-body .slug').val(slug);
+
+
+                $('#addModal').modal('show');
+
+            });
+
+
+
+
+
+
+            $('tbody').on('click','.btn-delete',function(e){
+                e.preventDefault();
+                if(confirm('你确定要删除吗')){
+
+                    var that=$(this);
+                    var deleteID=$(this).attr('data-id');
+
+                    $.post({
+                        url:'http://localhost:8000/admin/category_delete',
+                        data:
+                        {id:deleteID},
+                        success:function(dataBack){
+                            if(dataBack.code==200){
+                                that.parent().parent().remove();
+                            }
+                        }
+                    });
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         });
     </script>
 
