@@ -254,9 +254,21 @@
             <div class="row text-center">
 
 
-                <ul id="pagination" class="pagination-sm"></ul>
-               
- 
+                <ul id="pagination" class="pagination-sm">
+                    <li class="page-item first disabled"><a href="#" class="page-link">首页</a></li>
+                    <li class="page-item prev disabled"><a href="#" class="page-link">上一页</a></li>
+                    <li class="page-item active"><a href="#" class="page-link">1</a></li>
+                    <li class="page-item"><a href="#" class="page-link">2</a></li>
+                    <li class="page-item"><a href="#" class="page-link">3</a></li>
+                    <li class="page-item"><a href="#" class="page-link">4</a></li>
+                    <li class="page-item"><a href="#" class="page-link">5</a></li>
+                    <li class="page-item"><a href="#" class="page-link">6</a></li>
+                    <li class="page-item"><a href="#" class="page-link">7</a></li>
+                    <li class="page-item next"><a href="#" class="page-link">下一页</a></li>
+                    <li class="page-item last"><a href="#" class="page-link">尾页</a></li>
+                </ul>
+
+
             </div>
 
         </div>
@@ -319,7 +331,25 @@
         });
 
 
+        //分页
 
+        var myTotalPage = 10;
+        var $pagination = $('#pagination');
+        var defaultOpts = {
+            totalPages: myTotalPage, //最大的页签数
+            visiblePages: 5, //可见的页签数
+            first: '首页',
+            last: '尾页',
+            prev: "上一页",
+            next: "下一页",
+            onPageClick: function (event, page) { //点击页签回调函数.
+                //console.log(event);//点击时候触发的事件对象
+                //console.log(page); //点击的页码
+                //调用getData();
+                getData(page);
+            }
+        };
+        $pagination.twbsPagination(defaultOpts);
         //查询对应的文章显示在页面上
 
         function getData(myPage) {
@@ -333,10 +363,11 @@
                     type: category,
                     state: selStatu,
                     page: myPage,
-                    perpage:5,
+                    perpage: 5,
 
                 },
                 success: function (dataBack) {
+
                     console.log(dataBack);
 
                     if (dataBack.code == 200) {
@@ -345,10 +376,30 @@
 
                         $('tbody').html(res);
 
+                        var totalPages = dataBack.totalPage; //获取新的总的页数
+
+                        if (myTotalPage != totalPages) {
+                           
+                            myTotalPage = totalPages;
+
+                            var currentPage = $pagination.twbsPagination(
+                                'getCurrentPage'); //获取当前页
+
+                            $pagination.twbsPagination('destroy');
+                            $pagination.twbsPagination($.extend({}, defaultOpts, {
+                                startPage: 1,
+                                totalPages: totalPages
+                            }));
+
+
+                        }
+
                     }
                 }
             });
         };
+
+
 
 
 
@@ -361,24 +412,7 @@
 
 
         //一打开页面就刷出文章列表,用代码模拟点击触发
-        $('#btnSearch').trigger('click');
-
-
-
-        //分页
-
-
-        $('#pagination').twbsPagination({
-            totalPages: 35,
-            visiblePages: 7,
-            first:'首页',
-            last:'尾页',
-            prev:'上一页',
-            next:'下一页',
-            onPageClick: function (event, page) {
-             getData(page);
-            }
-        });
+        // $('#btnSearch').trigger('click');
     </script>
 
 </body>
