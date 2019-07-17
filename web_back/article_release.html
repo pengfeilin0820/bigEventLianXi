@@ -13,6 +13,7 @@
     <link type="text/css" rel="stylesheet" href="js/jedate/css/jedate.css">
     <script src="js/jquery-1.12.4.min.js"></script>
     <script src="js/jedate/js/jedate.js"></script>
+    <script src="js/moment.js"></script>
     <script src="js/tinymce/js/tinymce/tinymce.min.js"></script>
     <script src="js/tinymce/js/tinymce_setup.js"></script>
 </head>
@@ -109,9 +110,14 @@
         });
 
 
+        //一进来就获取当前时间
+
+        var currentDateStr=moment().format('YYYY-MM-DD');
+        $('#dateinput').val(currentDateStr);
+
+
 
         
-
     </script>
 </body>
 
