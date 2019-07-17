@@ -33,6 +33,7 @@
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
                     <div class="col-sm-10">
+                        <img src="./images/2.jpg" style="height: 100px" alt="" id="cover">
                         <input type="file" id="exampleInputFile">
                     </div>
                 </div>
@@ -80,6 +81,26 @@
         </div>
     </div>
 
+
+    <script>
+    
+
+
+
+
+    //实现图片预览
+    $('#exampleInputFile').on('change',function(){
+        var icon=this.files[0];
+        var iconUrl=URL.createObjectURL(icon);
+        $('#cover').attr('src',iconUrl);
+    })
+    
+    
+
+
+    
+    
+    </script>
 </body>
 
 </html>
