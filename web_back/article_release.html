@@ -28,20 +28,20 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3" placeholder="文章标题">
+                        <input type="email" class="form-control" id="inputEmail3" placeholder="文章标题" name="title">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
                     <div class="col-sm-10">
                         <img src="./images/2.jpg" style="height: 100px" alt="" id="cover">
-                        <input type="file" id="exampleInputFile">
+                        <input type="file" id="exampleInputFile" name="cover">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
-                        <select class="form-control" id="select_category">
+                        <select class="form-control" id="select_category" name="type">
 
                         </select>
                     </div>
@@ -51,7 +51,7 @@
                     <div class="col-sm-4">
 
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="dateinput">
+                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="dateinput" name="date">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button"
                                     onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i
@@ -70,8 +70,8 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">发布</button>
-                        <button type="submit" class="btn btn-default">存为草稿</button>
+                        <button type="submit" class="btn btn-success btn-release">发布</button>
+                        <button type="submit" class="btn btn-default" name="state">存为草稿</button>
                     </div>
                 </div>
             </form>
@@ -101,7 +101,7 @@
 
             success: function (dataBack) {
                 if (dataBack.code == 200) {
-                    console.log(dataBack);
+                    // console.log(dataBack);
 
                     var reshtml = template('article_category', dataBack);
                     $('#select_category').html(reshtml);
@@ -111,13 +111,33 @@
 
 
         //一进来就获取当前时间
-
-        var currentDateStr=moment().format('YYYY-MM-DD');
+        var currentDateStr = moment().format('YYYY-MM-DD');
         $('#dateinput').val(currentDateStr);
 
 
+        //点击发布按钮发布文章
 
-        
+        $('.btn-release').on('click', function () {
+
+            var formData1 = new FormData($('form')[0])
+            formData1.append('state', '草稿');
+            formData1.append('content', tinyMCE.activeEditor.getContent());
+
+            $.post({
+                url: "http://localhost:8000/admin/article_publish",
+                data: formData1,
+                contentType: false,
+                processData: false,
+                success: function (dataBack) {
+                    console.log(dataBack);
+
+                    if(dataBack.code==201){
+                        alert('发布成功');
+                    }
+
+                }
+            })
+        })
     </script>
 </body>
 
